@@ -22,7 +22,6 @@ export default function Home() {
       window.scrollTo(scrollOptions);
     } catch (error) {
       // Fallback for older browsers
-      window.scrollTo(0, windowHeight);
       console.log(error)
     }
   };
