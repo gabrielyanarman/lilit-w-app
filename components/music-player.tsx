@@ -12,14 +12,17 @@ export function MusicPlayer() {
   const [manuallyTurnedOff, setManuallyTurnedOff] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  // Detect iOS devices
+  // Detect iOS devices - improved detection
   useEffect(() => {
     const ios =
       /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
+      /iPhone|iPad|iPod/.test(navigator.platform);
+
     setIsIOS(ios);
+    console.log("iOS detected:", ios);
   }, []);
 
   // Create and set up audio element
@@ -62,75 +65,108 @@ export function MusicPlayer() {
     };
   }, []);
 
-  // Listen for first user interaction to enable audio
+  // Listen for first user interaction to enable audio - simplified for iOS
   useEffect(() => {
-    const handleFirstInteraction = () => {
-      if (!userInteracted) {
-        setUserInteracted(true);
+    if (isIOS) {
+      // For iOS, we need a simpler approach - just listen for any touch
+      const handleIOSInteraction = () => {
+        if (!userInteracted) {
+          console.log("First iOS interaction detected");
+          setUserInteracted(true);
 
-        // Only auto-play if user hasn't manually turned off music
-        if (!manuallyTurnedOff && audioRef.current && !isPlaying) {
-          // Small delay to ensure interaction is registered
-          setTimeout(() => {
+          // Only auto-play if user hasn't manually turned off music
+          if (!manuallyTurnedOff && audioRef.current && !isPlaying) {
+            // Try to play immediately on first interaction
             playAudio();
-          }, 100);
+          }
         }
-      }
-    };
+      };
 
-    // Add event listeners for user interactions
-    const interactionEvents = ["click", "touchstart", "touchend"];
-
-    interactionEvents.forEach((event) => {
-      document.addEventListener(event, handleFirstInteraction, { once: false });
-    });
-
-    return () => {
-      interactionEvents.forEach((event) => {
-        document.removeEventListener(event, handleFirstInteraction);
+      // Add touch events specifically for iOS
+      document.addEventListener("touchstart", handleIOSInteraction, {
+        once: true,
       });
-    };
-  }, [isPlaying, manuallyTurnedOff, userInteracted]);
+
+      return () => {
+        document.removeEventListener("touchstart", handleIOSInteraction);
+      };
+    } else {
+      // Non-iOS devices
+      const handleFirstInteraction = () => {
+        if (!userInteracted) {
+          setUserInteracted(true);
+
+          if (!manuallyTurnedOff && audioRef.current && !isPlaying) {
+            setTimeout(() => {
+              playAudio();
+            }, 100);
+          }
+        }
+      };
+
+      const interactionEvents = ["click", "touchstart"];
+
+      interactionEvents.forEach((event) => {
+        document.addEventListener(event, handleFirstInteraction, {
+          once: true,
+        });
+      });
+
+      return () => {
+        interactionEvents.forEach((event) => {
+          document.removeEventListener(event, handleFirstInteraction);
+        });
+      };
+    }
+  }, [isPlaying, manuallyTurnedOff, userInteracted, isIOS]);
 
   // Play audio with iOS-specific handling
   const playAudio = async () => {
     if (!audioRef.current) return;
 
     try {
-      // For iOS, we need to ensure the audio context is resumed
+      console.log("Attempting to play audio");
+
+      // For iOS, we need a more direct approach
       if (isIOS) {
-        // Используем другое имя, чтобы избежать конфликта
-        const AudioCtx =
-          window.AudioContext ||
-          (
-            window as Window & {
-              webkitAudioContext?: typeof AudioContext;
-            }
-          ).webkitAudioContext;
+        try {
+          // Direct play attempt for iOS
+          await audioRef.current.play();
+          console.log("iOS play successful");
+          setIsPlaying(true);
+        } catch (iosError) {
+          console.error("iOS play failed:", iosError);
 
-        if (AudioCtx) {
-          const audioContext = new AudioCtx();
-          await audioContext.resume();
+          // Fallback for iOS - try with user gesture
+          const unlockAudio = () => {
+            if (audioRef.current) {
+              audioRef.current
+                .play()
+                .then(() => {
+                  console.log("iOS play successful after user gesture");
+                  setIsPlaying(true);
+                  document.removeEventListener("touchend", unlockAudio);
+                })
+                .catch((err) => console.error("Still failed on iOS:", err));
+            }
+          };
+
+          document.addEventListener("touchend", unlockAudio, { once: true });
         }
-      }
+      } else {
+        // Standard approach for other browsers
+        const playPromise = audioRef.current.play();
 
-      // Play the audio
-      const playPromise = audioRef.current.play();
-
-      // Modern browsers return a promise from play()
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log("Audio playback started successfully");
-            setIsPlaying(true);
-          })
-          .catch((error) => {
-            console.error("Error playing audio:", error);
-            // iOS often requires direct user interaction with the element
-            if (isIOS) {
-              console.log("iOS detected, may require direct interaction");
-            }
-          });
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log("Audio playback started successfully");
+              setIsPlaying(true);
+            })
+            .catch((error) => {
+              console.error("Error playing audio:", error);
+            });
+        }
       }
     } catch (error) {
       console.error("Error in playAudio function:", error);
@@ -149,25 +185,33 @@ export function MusicPlayer() {
     }
   };
 
-  // Toggle play/pause with manual tracking
-  const togglePlay = async () => {
+  // Toggle play/pause with manual tracking - improved for iOS
+  const togglePlay = async (e: React.MouseEvent | React.TouchEvent) => {
+    // Stop propagation to prevent other handlers from firing
+    e.stopPropagation();
+
     if (!audioRef.current) return;
+
+    console.log("Toggle play clicked, current state:", isPlaying);
 
     if (isPlaying) {
       pauseAudio();
-      setManuallyTurnedOff(true); // User manually turned off music
+      setManuallyTurnedOff(true);
     } else {
-      await playAudio();
-      setManuallyTurnedOff(false); // User manually turned on music
-    }
-  };
-
-  // Special handling for iOS touch events
-  const handleIOSTouch = (e: React.TouchEvent) => {
-    if (isIOS) {
-      // Prevent default to avoid double-firing
-      e.preventDefault();
-      togglePlay();
+      // For iOS, we need to ensure we're in a user gesture context
+      if (isIOS) {
+        try {
+          // Direct attempt within user gesture
+          await audioRef.current.play();
+          setIsPlaying(true);
+          setManuallyTurnedOff(false);
+        } catch (iosError) {
+          console.error("iOS toggle play failed:", iosError);
+        }
+      } else {
+        await playAudio();
+        setManuallyTurnedOff(false);
+      }
     }
   };
 
@@ -175,11 +219,14 @@ export function MusicPlayer() {
     <button
       ref={buttonRef}
       onClick={togglePlay}
-      onTouchEnd={isIOS ? handleIOSTouch : undefined}
+      onTouchStart={isIOS ? togglePlay : undefined}
       className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/80 shadow-md hover:bg-white transition-colors cursor-pointer active:bg-gray-200"
       aria-label={isPlaying ? "Mute music" : "Play music"}
       disabled={!isLoaded}
-      style={{ WebkitTapHighlightColor: "transparent" }} // Remove tap highlight on iOS
+      style={{
+        WebkitTapHighlightColor: "transparent",
+        touchAction: "manipulation", // Improve touch handling
+      }}
     >
       {isPlaying ? (
         <Volume2 className="h-6 w-6 text-stone-800" />

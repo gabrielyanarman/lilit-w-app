@@ -3,11 +3,10 @@
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 export function GallerySection() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  //const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  //const [selectedIndex, setSelectedIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -97,63 +96,31 @@ export function GallerySection() {
       isIOS ? 500 : 0
     ); // Delay for iOS
 
-    // Pause scrolling when interacting
-    const handlePause = () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
-    };
-
-    const handleResume = () => {
-      // Only resume if not already animating
-      if (!animationRef.current) {
-        animationRef.current = requestAnimationFrame(scroll);
-      }
-    };
-
-    // For desktop
-    scrollContainer.addEventListener("mouseenter", handlePause);
-    scrollContainer.addEventListener("mouseleave", handleResume);
-
-    // For mobile
-    scrollContainer.addEventListener("touchstart", handlePause, {
-      passive: true,
-    });
-    scrollContainer.addEventListener("touchend", handleResume);
-
     // Clean up
     return () => {
       clearTimeout(timeoutId);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-
-      if (scrollContainer) {
-        scrollContainer.removeEventListener("mouseenter", handlePause);
-        scrollContainer.removeEventListener("mouseleave", handleResume);
-        scrollContainer.removeEventListener("touchstart", handlePause);
-        scrollContainer.removeEventListener("touchend", handleResume);
-      }
     };
   }, [galleryImages.length, isMobile, isIOS]);
 
-  // Open image modal
-  const openImageModal = (src: string, index: number) => {
-    setSelectedImage(src);
-    setSelectedIndex(index);
-  };
+  // // Open image modal
+  // const openImageModal = (src: string, index: number) => {
+  //   setSelectedImage(src)
+  //   setSelectedIndex(index)
+  // }
 
-  // Navigate between images in modal
-  const navigateImage = (direction: "next" | "prev") => {
-    const newIndex =
-      direction === "next"
-        ? (selectedIndex + 1) % galleryImages.length
-        : (selectedIndex - 1 + galleryImages.length) % galleryImages.length;
+  // // Navigate between images in modal
+  // const navigateImage = (direction: "next" | "prev") => {
+  //   const newIndex =
+  //     direction === "next"
+  //       ? (selectedIndex + 1) % galleryImages.length
+  //       : (selectedIndex - 1 + galleryImages.length) % galleryImages.length
 
-    setSelectedIndex(newIndex);
-    setSelectedImage(galleryImages[newIndex].src);
-  };
+  //   setSelectedIndex(newIndex)
+  //   setSelectedImage(galleryImages[newIndex].src)
+  // }
 
   return (
     <section className="py-12 md:py-24 w-full overflow-hidden">
@@ -176,8 +143,7 @@ export function GallerySection() {
           {galleryImages.map((image, index) => (
             <div
               key={`original-${index}`}
-              className="relative flex-none w-[250px] md:w-[300px] h-[320px] md:h-[400px] rounded-sm overflow-hidden cursor-pointer"
-              onClick={() => openImageModal(image.src, index)}
+              className="relative flex-none w-[250px] md:w-[300px] h-[320px] md:h-[400px] rounded-sm overflow-hidden"
             >
               <Image
                 src={image.src || "/placeholder.svg"}
@@ -195,8 +161,7 @@ export function GallerySection() {
           {galleryImages.map((image, index) => (
             <div
               key={`duplicate-${index}`}
-              className="relative flex-none w-[250px] md:w-[300px] h-[320px] md:h-[400px] rounded-sm overflow-hidden cursor-pointer"
-              onClick={() => openImageModal(image.src, index)}
+              className="relative flex-none w-[250px] md:w-[300px] h-[320px] md:h-[400px] rounded-sm overflow-hidden"
             >
               <Image
                 src={image.src || "/placeholder.svg"}
@@ -211,28 +176,26 @@ export function GallerySection() {
       </div>
 
       {/* Image viewer modal - improved for mobile */}
-      {selectedImage && (
+      {/* {selectedImage && (
         <div
           className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col items-center justify-center p-2 md:p-4"
           onClick={() => setSelectedImage(null)}
         >
-          {/* Close button - larger target area on mobile */}
           <button
             className="absolute top-2 md:top-4 right-2 md:right-4 text-white p-3 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-colors z-10"
             onClick={(e) => {
-              e.stopPropagation();
-              setSelectedImage(null);
+              e.stopPropagation()
+              setSelectedImage(null)
             }}
           >
             <X className="h-5 w-5 md:h-6 md:w-6" />
           </button>
 
-          {/* Navigation buttons */}
           <button
             className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 text-white p-2 md:p-3 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-colors z-10"
             onClick={(e) => {
-              e.stopPropagation();
-              navigateImage("prev");
+              e.stopPropagation()
+              navigateImage("prev")
             }}
           >
             <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
@@ -241,14 +204,13 @@ export function GallerySection() {
           <button
             className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 text-white p-2 md:p-3 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-colors z-10"
             onClick={(e) => {
-              e.stopPropagation();
-              navigateImage("next");
+              e.stopPropagation()
+              navigateImage("next")
             }}
           >
             <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
           </button>
 
-          {/* Image container */}
           <div className="relative w-full h-[70vh] md:h-[80vh] max-w-3xl md:max-w-4xl">
             <Image
               src={selectedImage || "/placeholder.svg"}
@@ -260,12 +222,11 @@ export function GallerySection() {
             />
           </div>
 
-          {/* Image counter for mobile */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black bg-opacity-50 px-3 py-1 rounded-full text-white text-sm">
             {selectedIndex + 1} / {galleryImages.length}
           </div>
         </div>
-      )}
+      )} */}
     </section>
   );
 }
