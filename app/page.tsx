@@ -1,5 +1,6 @@
+"use client";
 import Image from "next/image";
-import { Calendar, ChevronDown, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, MapPin, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CountdownTimer } from "@/components/countdown-timer";
@@ -7,6 +8,25 @@ import { GallerySection } from "@/components/gallery-section";
 import { MusicPlayer } from "@/components/music-player";
 
 export default function Home() {
+  // Smooth scroll function for the down arrow
+  const handleScrollDown = () => {
+    const windowHeight = window.innerHeight;
+    const scrollOptions = {
+      top: windowHeight,
+      behavior: "smooth" as ScrollBehavior,
+    };
+
+    // Use different scroll methods for better compatibility
+    try {
+      // Modern browsers
+      window.scrollTo(scrollOptions);
+    } catch (error) {
+      // Fallback for older browsers
+      window.scrollTo(0, windowHeight);
+      console.log(error)
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center">
       {/* Hero Section */}
@@ -20,7 +40,16 @@ export default function Home() {
             priority
             className="object-cover"
           />
-          <ChevronDown className="h-10 w-10 text-white drop-shadow-lg absolute bottom-4 left-1/2 transform -translate-x-1/2 block md:hidden" />
+          <div
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10 md:hidden"
+            onClick={handleScrollDown}
+            aria-label="Scroll down"
+          >
+            <ChevronDown className="h-10 w-10 text-white drop-shadow-lg animate-bounce" />
+            <p className="text-white text-sm mt-1 drop-shadow-lg">
+              Scroll Down
+            </p>
+          </div>
         </div>
 
         <div className="inset-0 flex flex-col items-center justify-center text-center z-20 text-black p-4 gap-12">

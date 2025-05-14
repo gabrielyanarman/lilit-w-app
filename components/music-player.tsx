@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useEffect, useRef } from "react";
-import { Volume2, VolumeX } from "lucide-react";
+import { Play, Pause } from "lucide-react";
 
 export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -166,9 +166,14 @@ export function MusicPlayer() {
   };
 
   // Toggle play/pause with manual tracking - improved for iOS
-  const togglePlay = async (e: React.MouseEvent | React.TouchEvent) => {
+  const togglePlay = (e: React.MouseEvent | React.TouchEvent) => {
     // Stop propagation to prevent other handlers from firing
     e.stopPropagation();
+
+    // Prevent default behavior
+    if (e.nativeEvent.cancelable) {
+      e.preventDefault();
+    }
 
     if (!audioRef.current) return;
 
@@ -182,14 +187,20 @@ export function MusicPlayer() {
       if (isIOS) {
         try {
           // Direct attempt within user gesture
-          await audioRef.current.play();
-          setIsPlaying(true);
-          setManuallyTurnedOff(false);
-        } catch (iosError) {
-          console.error("iOS toggle play failed:", iosError);
+          audioRef.current
+            .play()
+            .then(() => {
+              setIsPlaying(true);
+              setManuallyTurnedOff(false);
+            })
+            .catch((iosError) => {
+              console.error("iOS toggle play failed:", iosError);
+            });
+        } catch (error) {
+          console.error("Error playing on iOS:", error);
         }
       } else {
-        await playAudio();
+        playAudio();
         setManuallyTurnedOff(false);
       }
     }
@@ -201,7 +212,7 @@ export function MusicPlayer() {
       onClick={togglePlay}
       onTouchStart={isIOS ? togglePlay : undefined}
       className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/80 shadow-md hover:bg-white transition-colors cursor-pointer active:bg-gray-200"
-      aria-label={isPlaying ? "Mute music" : "Play music"}
+      aria-label={isPlaying ? "Pause music" : "Play music"}
       disabled={!isLoaded}
       style={{
         WebkitTapHighlightColor: "transparent",
@@ -209,9 +220,9 @@ export function MusicPlayer() {
       }}
     >
       {isPlaying ? (
-        <Volume2 className="h-6 w-6 text-stone-800" />
+        <Pause className="h-6 w-6 text-stone-800" />
       ) : (
-        <VolumeX className="h-6 w-6 text-stone-800" />
+        <Play className="h-6 w-6 text-stone-800" />
       )}
     </button>
   );

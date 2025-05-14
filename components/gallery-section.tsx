@@ -49,13 +49,14 @@ export function GallerySection() {
     };
   }, []);
 
-  // Auto-scrolling effect with infinite loop - improved to be more resilient
+  // Auto-scrolling effect with infinite loop - improved speed and smoothness
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
     let scrollPosition = 0;
-    const scrollSpeed = isMobile ? 0.3 : 0.5; // Slower on mobile
+    // Increased scroll speed for better experience
+    const scrollSpeed = isMobile ? 0.8 : 1.2; // Faster on both mobile and desktop
 
     // Calculate the width of a single set of images
     const calculateSetWidth = () => {
@@ -71,7 +72,7 @@ export function GallerySection() {
 
     const singleSetWidth = calculateSetWidth();
 
-    // Main scroll animation function
+    // Main scroll animation function - improved for smoother scrolling
     const scroll = () => {
       if (!scrollContainer || singleSetWidth === 0) return;
 
@@ -86,7 +87,7 @@ export function GallerySection() {
           scrollContainer.scrollLeft = 0;
         }
 
-        // Apply the scroll position
+        // Apply the scroll position with smooth interpolation
         scrollContainer.scrollLeft = scrollPosition;
       } else {
         // If user is manually scrolling, just update our tracking position
@@ -104,7 +105,7 @@ export function GallerySection() {
     };
 
     // Start with a slight delay for iOS
-    const timeoutId = setTimeout(startAnimation, isIOS ? 500 : 0);
+    const timeoutId = setTimeout(startAnimation, isIOS ? 300 : 0);
 
     // Handle user manual scrolling
     const handleScrollStart = () => {
@@ -113,12 +114,12 @@ export function GallerySection() {
     };
 
     const handleScrollEnd = () => {
-      // Short delay before resuming auto-scroll
+      // Shorter delay before resuming auto-scroll for better experience
       setTimeout(() => {
         scrollingPaused.current = false;
         // Update the scroll position to where the user left off
         scrollPosition = scrollContainer.scrollLeft;
-      }, 500);
+      }, 300); // Reduced from 500ms to 300ms for faster response
     };
 
     // Add event listeners for manual scrolling
