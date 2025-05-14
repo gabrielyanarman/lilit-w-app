@@ -12,9 +12,11 @@ export function MusicPlayer() {
   const [manuallyTurnedOff, setManuallyTurnedOff] = useState(false);
   const [firstInteractionComplete, setFirstInteractionComplete] =
     useState(false);
+  const [isProcessingClick, setIsProcessingClick] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Detect iOS devices - improved detection
   useEffect(() => {
@@ -64,6 +66,11 @@ export function MusicPlayer() {
       audio.removeEventListener("canplaythrough", handleCanPlayThrough);
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
+
+      // Clear any pending timeouts
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -165,55 +172,45 @@ export function MusicPlayer() {
     }
   };
 
-  // Toggle play/pause with manual tracking - improved for iOS
-  const togglePlay = (e: React.MouseEvent | React.TouchEvent) => {
-    // Stop propagation to prevent other handlers from firing
+  // Unified handler for all click/touch events with debounce
+  const handleButtonInteraction = (e: React.MouseEvent | React.TouchEvent) => {
+    // Prevent default behavior and stop propagation
+    e.preventDefault();
     e.stopPropagation();
 
-    // Prevent default behavior
-    if (e.nativeEvent.cancelable) {
-      e.preventDefault();
+    // If we're already processing a click, ignore this one
+    if (isProcessingClick) return;
+
+    // Set processing flag to prevent multiple rapid clicks
+    setIsProcessingClick(true);
+
+    // Clear any existing timeout
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
     }
 
-    if (!audioRef.current) return;
-
-    console.log("Toggle play clicked, current state:", isPlaying);
-
+    // Toggle audio state
     if (isPlaying) {
       pauseAudio();
       setManuallyTurnedOff(true);
     } else {
-      // For iOS, we need to ensure we're in a user gesture context
-      if (isIOS) {
-        try {
-          // Direct attempt within user gesture
-          audioRef.current
-            .play()
-            .then(() => {
-              setIsPlaying(true);
-              setManuallyTurnedOff(false);
-            })
-            .catch((iosError) => {
-              console.error("iOS toggle play failed:", iosError);
-            });
-        } catch (error) {
-          console.error("Error playing on iOS:", error);
-        }
-      } else {
-        playAudio();
-        setManuallyTurnedOff(false);
-      }
+      playAudio();
+      setManuallyTurnedOff(false);
     }
+
+    // Set a timeout to allow new clicks after a short delay
+    clickTimeoutRef.current = setTimeout(() => {
+      setIsProcessingClick(false);
+    }, 300); // 300ms debounce
   };
 
   return (
     <button
       ref={buttonRef}
-      onClick={togglePlay}
-      onTouchStart={isIOS ? togglePlay : undefined}
+      onClick={handleButtonInteraction}
       className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/80 shadow-md hover:bg-white transition-colors cursor-pointer active:bg-gray-200"
       aria-label={isPlaying ? "Pause music" : "Play music"}
-      disabled={!isLoaded}
+      disabled={!isLoaded || isProcessingClick}
       style={{
         WebkitTapHighlightColor: "transparent",
         touchAction: "manipulation", // Improve touch handling
