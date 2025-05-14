@@ -99,11 +99,17 @@ export function MusicPlayer() {
     try {
       // For iOS, we need to ensure the audio context is resumed
       if (isIOS) {
-        // Create and resume AudioContext (iOS requires this)
-        const AudioContext =
-          window.AudioContext || (window as any).webkitAudioContext;
-        if (AudioContext) {
-          const audioContext = new AudioContext();
+        // Используем другое имя, чтобы избежать конфликта
+        const AudioCtx =
+          window.AudioContext ||
+          (
+            window as Window & {
+              webkitAudioContext?: typeof AudioContext;
+            }
+          ).webkitAudioContext;
+
+        if (AudioCtx) {
+          const audioContext = new AudioCtx();
           await audioContext.resume();
         }
       }
