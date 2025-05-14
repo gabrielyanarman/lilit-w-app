@@ -1,16 +1,18 @@
 "use client";
 
+import type React from "react";
+
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 
 export function GallerySection() {
-  //const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  //const [selectedIndex, setSelectedIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
+  const lastScrollPosition = useRef(0);
+  const scrollingPaused = useRef(false);
 
   // Sample gallery images - replace with actual images
   const galleryImages = [
@@ -47,7 +49,7 @@ export function GallerySection() {
     };
   }, []);
 
-  // Auto-scrolling effect with infinite loop
+  // Auto-scrolling effect with infinite loop - improved to be more resilient
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
@@ -69,58 +71,107 @@ export function GallerySection() {
 
     const singleSetWidth = calculateSetWidth();
 
+    // Main scroll animation function
     const scroll = () => {
       if (!scrollContainer || singleSetWidth === 0) return;
 
-      // Increment scroll position
-      scrollPosition += scrollSpeed;
+      // Only update scroll position if not manually scrolling
+      if (!scrollingPaused.current) {
+        // Increment scroll position
+        scrollPosition += scrollSpeed;
 
-      // If we've scrolled past the first set of images, reset to the beginning
-      if (scrollPosition >= singleSetWidth) {
-        scrollPosition = 0;
-        scrollContainer.scrollLeft = 0;
+        // If we've scrolled past the first set of images, reset to the beginning
+        if (scrollPosition >= singleSetWidth) {
+          scrollPosition = 0;
+          scrollContainer.scrollLeft = 0;
+        }
+
+        // Apply the scroll position
+        scrollContainer.scrollLeft = scrollPosition;
+      } else {
+        // If user is manually scrolling, just update our tracking position
+        scrollPosition = scrollContainer.scrollLeft;
       }
 
-      // Apply the scroll position
-      scrollContainer.scrollLeft = scrollPosition;
-
-      // Continue animation
+      // Always continue the animation regardless of user interaction
       animationRef.current = requestAnimationFrame(scroll);
     };
 
-    // Start the animation with a slight delay for iOS
-    const timeoutId = setTimeout(
-      () => {
-        animationRef.current = requestAnimationFrame(scroll);
-      },
-      isIOS ? 500 : 0
-    ); // Delay for iOS
+    // Start the animation
+    const startAnimation = () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      animationRef.current = requestAnimationFrame(scroll);
+    };
 
-    // Clean up
-    return () => {
-      clearTimeout(timeoutId);
-      if (animationRef.current) {
+    // Start with a slight delay for iOS
+    const timeoutId = setTimeout(startAnimation, isIOS ? 500 : 0);
+
+    // Handle user manual scrolling
+    const handleScrollStart = () => {
+      scrollingPaused.current = true;
+      lastScrollPosition.current = scrollContainer.scrollLeft;
+    };
+
+    const handleScrollEnd = () => {
+      // Short delay before resuming auto-scroll
+      setTimeout(() => {
+        scrollingPaused.current = false;
+        // Update the scroll position to where the user left off
+        scrollPosition = scrollContainer.scrollLeft;
+      }, 500);
+    };
+
+    // Add event listeners for manual scrolling
+    scrollContainer.addEventListener("touchstart", handleScrollStart, {
+      passive: true,
+    });
+    scrollContainer.addEventListener("touchend", handleScrollEnd, {
+      passive: true,
+    });
+    scrollContainer.addEventListener("mousedown", handleScrollStart);
+    scrollContainer.addEventListener("mouseup", handleScrollEnd);
+
+    // Ensure animation continues even when scrolling the page
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        startAnimation();
+      } else if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Ensure animation continues when scrolling back to the gallery
+    const handleScroll = () => {
+      const rect = scrollContainer.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible && !animationRef.current) {
+        startAnimation();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Clean up
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+
+      scrollContainer.removeEventListener("touchstart", handleScrollStart);
+      scrollContainer.removeEventListener("touchend", handleScrollEnd);
+      scrollContainer.removeEventListener("mousedown", handleScrollStart);
+      scrollContainer.removeEventListener("mouseup", handleScrollEnd);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [galleryImages.length, isMobile, isIOS]);
 
-  // // Open image modal
-  // const openImageModal = (src: string, index: number) => {
-  //   setSelectedImage(src)
-  //   setSelectedIndex(index)
-  // }
-
-  // // Navigate between images in modal
-  // const navigateImage = (direction: "next" | "prev") => {
-  //   const newIndex =
-  //     direction === "next"
-  //       ? (selectedIndex + 1) % galleryImages.length
-  //       : (selectedIndex - 1 + galleryImages.length) % galleryImages.length
-
-  //   setSelectedIndex(newIndex)
-  //   setSelectedImage(galleryImages[newIndex].src)
-  // }
+  // Prevent default click behavior to avoid stopping the animation
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+  };
 
   return (
     <section className="py-12 md:py-24 w-full overflow-hidden">
@@ -136,7 +187,9 @@ export function GallerySection() {
           scrollbarWidth: "none",
           msOverflowStyle: "none",
           WebkitOverflowScrolling: "touch", // Improve scroll on iOS
+          cursor: "grab",
         }}
+        onClick={handleClick} // Prevent default click behavior
       >
         <div className="flex gap-3 md:gap-4 px-4 pb-4">
           {/* Original set of images */}
@@ -144,6 +197,7 @@ export function GallerySection() {
             <div
               key={`original-${index}`}
               className="relative flex-none w-[250px] md:w-[300px] h-[320px] md:h-[400px] rounded-sm overflow-hidden"
+              onClick={handleClick} // Prevent default click behavior
             >
               <Image
                 src={image.src || "/placeholder.svg"}
@@ -153,6 +207,7 @@ export function GallerySection() {
                 className="object-cover"
                 loading="eager" // Force eager loading for first images
                 priority={index < 3} // Prioritize first 3 images
+                draggable={false} // Prevent dragging images
               />
             </div>
           ))}
@@ -162,6 +217,7 @@ export function GallerySection() {
             <div
               key={`duplicate-${index}`}
               className="relative flex-none w-[250px] md:w-[300px] h-[320px] md:h-[400px] rounded-sm overflow-hidden"
+              onClick={handleClick} // Prevent default click behavior
             >
               <Image
                 src={image.src || "/placeholder.svg"}
@@ -169,64 +225,12 @@ export function GallerySection() {
                 fill
                 sizes="(max-width: 768px) 250px, 300px"
                 className="object-cover"
+                draggable={false} // Prevent dragging images
               />
             </div>
           ))}
         </div>
       </div>
-
-      {/* Image viewer modal - improved for mobile */}
-      {/* {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col items-center justify-center p-2 md:p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <button
-            className="absolute top-2 md:top-4 right-2 md:right-4 text-white p-3 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-colors z-10"
-            onClick={(e) => {
-              e.stopPropagation()
-              setSelectedImage(null)
-            }}
-          >
-            <X className="h-5 w-5 md:h-6 md:w-6" />
-          </button>
-
-          <button
-            className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 text-white p-2 md:p-3 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-colors z-10"
-            onClick={(e) => {
-              e.stopPropagation()
-              navigateImage("prev")
-            }}
-          >
-            <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
-          </button>
-
-          <button
-            className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 text-white p-2 md:p-3 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-colors z-10"
-            onClick={(e) => {
-              e.stopPropagation()
-              navigateImage("next")
-            }}
-          >
-            <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
-          </button>
-
-          <div className="relative w-full h-[70vh] md:h-[80vh] max-w-3xl md:max-w-4xl">
-            <Image
-              src={selectedImage || "/placeholder.svg"}
-              alt={`Gallery image ${selectedIndex + 1}`}
-              fill
-              sizes="(max-width: 768px) 100vw, 80vw"
-              className="object-contain"
-              priority
-            />
-          </div>
-
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black bg-opacity-50 px-3 py-1 rounded-full text-white text-sm">
-            {selectedIndex + 1} / {galleryImages.length}
-          </div>
-        </div>
-      )} */}
     </section>
   );
 }

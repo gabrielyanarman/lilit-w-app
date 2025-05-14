@@ -10,6 +10,8 @@ export function MusicPlayer() {
   const [isIOS, setIsIOS] = useState(false);
   const [userInteracted, setUserInteracted] = useState(false);
   const [manuallyTurnedOff, setManuallyTurnedOff] = useState(false);
+  const [firstInteractionComplete, setFirstInteractionComplete] =
+    useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -65,60 +67,38 @@ export function MusicPlayer() {
     };
   }, []);
 
-  // Listen for first user interaction to enable audio - simplified for iOS
+  // Listen for first user interaction to enable audio - only once
   useEffect(() => {
-    if (isIOS) {
-      // For iOS, we need a simpler approach - just listen for any touch
-      const handleIOSInteraction = () => {
-        if (!userInteracted) {
-          console.log("First iOS interaction detected");
-          setUserInteracted(true);
+    // Only set up the first interaction handler if we haven't had one yet
+    if (firstInteractionComplete) return;
 
-          // Only auto-play if user hasn't manually turned off music
-          if (!manuallyTurnedOff && audioRef.current && !isPlaying) {
-            // Try to play immediately on first interaction
-            playAudio();
-          }
+    const handleFirstInteraction = () => {
+      if (!userInteracted) {
+        console.log("First interaction detected");
+        setUserInteracted(true);
+        setFirstInteractionComplete(true);
+
+        // Only auto-play if user hasn't manually turned off music
+        if (!manuallyTurnedOff && audioRef.current && !isPlaying) {
+          // Try to play immediately on first interaction
+          playAudio();
         }
-      };
+      }
+    };
 
-      // Add touch events specifically for iOS
-      document.addEventListener("touchstart", handleIOSInteraction, {
-        once: true,
-      });
+    // Add event listeners for user interactions
+    const interactionEvents = ["click", "touchstart"];
 
-      return () => {
-        document.removeEventListener("touchstart", handleIOSInteraction);
-      };
-    } else {
-      // Non-iOS devices
-      const handleFirstInteraction = () => {
-        if (!userInteracted) {
-          setUserInteracted(true);
+    interactionEvents.forEach((event) => {
+      document.addEventListener(event, handleFirstInteraction, { once: true });
+    });
 
-          if (!manuallyTurnedOff && audioRef.current && !isPlaying) {
-            setTimeout(() => {
-              playAudio();
-            }, 100);
-          }
-        }
-      };
-
-      const interactionEvents = ["click", "touchstart"];
-
+    return () => {
       interactionEvents.forEach((event) => {
-        document.addEventListener(event, handleFirstInteraction, {
-          once: true,
-        });
+        document.removeEventListener(event, handleFirstInteraction);
       });
-
-      return () => {
-        interactionEvents.forEach((event) => {
-          document.removeEventListener(event, handleFirstInteraction);
-        });
-      };
-    }
-  }, [isPlaying, manuallyTurnedOff, userInteracted, isIOS]);
+    };
+  }, [isPlaying, manuallyTurnedOff, userInteracted, firstInteractionComplete]);
 
   // Play audio with iOS-specific handling
   const playAudio = async () => {
