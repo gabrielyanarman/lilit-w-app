@@ -39,6 +39,15 @@ export default function Home() {
             priority
             className="object-cover"
           />
+          <div className="absolute top-4 left-4 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
+            <h1 className="font-serif text-white">Արման</h1>
+          </div>
+          <div className="absolute top-12 left-12 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
+            <h1 className="font-serif text-white">&</h1>
+          </div>
+          <div className="absolute top-20 left-14 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
+            <h1 className="font-serif text-white">Անահիտ</h1>
+          </div>
           <div
             className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10 md:hidden"
             onClick={handleScrollDown}
@@ -52,13 +61,11 @@ export default function Home() {
         </div>
 
         <div className="inset-0 flex flex-col items-center justify-center text-center z-20 text-black p-4 gap-6">
-          <div>
-            {/* <h1 className="font-serif text-5xl md:text-7xl mb-4">
-              Արման & Անահիտ
-            </h1> */}
-          </div>
+          <div></div>
           <div className="flex flex-col gap-2">
-            <p className="text-xl md:text-2xl mb-4 font-light">Հարգելի՝ հյուրեր</p>
+            <p className="text-xl md:text-2xl mb-4 font-light">
+              Հարգելի՝ հյուրեր
+            </p>
             <p className="">Սիրով հրավիրում ենք Ձեզ</p>
             <p className="">կիսելու մեզ հետ, մեր կյանքի</p>
             <p className="">կարևոր և հիշարժան օրը</p>
