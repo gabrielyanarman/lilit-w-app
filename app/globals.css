@@ -19,6 +19,13 @@
   }
 }
 
+@font-face {
+  font-family: 'Noto Serif Armenian';
+  src: url('/fonts/Tangerine-Regular.ttf') format('truetype');
+  font-weight: bolder;
+  font-style: italic;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

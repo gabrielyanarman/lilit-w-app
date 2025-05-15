@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center">
       {/* Hero Section */}
-      <section className="flex flex-col gap-10">
+      <section className="flex flex-col gap-4">
         {/* <div className="absolute inset-0 bg-black/30 z-10" /> */}
         <div className="h-screen w-full">
           <Image
@@ -57,17 +57,18 @@ export default function Home() {
               Արման & Անահիտ
             </h1> */}
           </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-xl md:text-2xl mb-4 font-light">Հարգելի՝ հյուրեր</p>
+            <p className="">Սիրով հրավիրում ենք Ձեզ</p>
+            <p className="">կիսելու մեզ հետ, մեր կյանքի</p>
+            <p className="">կարևոր և հիշարժան օրը</p>
+            <p className="">28․06․2025</p>
+          </div>
           <div>
             <p className="text-xl md:text-2xl mb-8 font-light">
               Հարսանիքին մնացել է
             </p>
             <CountdownTimer targetDate="2025-06-26T17:00:00" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <p className="">Սիրով հրավիրում ենք Ձեզ</p>
-            <p className="">կիսելու մեզ հետ, մեր կյանքի</p>
-            <p className="">կարևոր և հիշարժան օրը</p>
-            <p className="">28․06․2025</p>
           </div>
         </div>
       </section>

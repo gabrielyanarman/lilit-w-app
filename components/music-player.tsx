@@ -1,121 +1,121 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react"
 import { Play, Pause } from "lucide-react";
 
-export function MusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
-  const [userInteracted, setUserInteracted] = useState(false);
-  const [manuallyTurnedOff, setManuallyTurnedOff] = useState(false);
-  const [firstInteractionComplete, setFirstInteractionComplete] =
-    useState(false);
-  const [isProcessingClick, setIsProcessingClick] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Detect iOS devices - improved detection
+export function MusicPlayer() {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isIOS, setIsIOS] = useState(false)
+  const [isAndroid, setIsAndroid] = useState(false)
+  const [userInteracted, setUserInteracted] = useState(false)
+  const [manuallyTurnedOff, setManuallyTurnedOff] = useState(false)
+  const [firstInteractionComplete, setFirstInteractionComplete] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
+
+  // Detect device types - improved detection for both iOS and Android
   useEffect(() => {
     const ios =
       /iPad|iPhone|iPod/.test(navigator.userAgent) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
-      /iPhone|iPad|iPod/.test(navigator.platform);
+      /iPhone|iPad|iPod/.test(navigator.platform)
 
-    setIsIOS(ios);
-    console.log("iOS detected:", ios);
-  }, []);
+    const android = /Android/.test(navigator.userAgent)
+
+    setIsIOS(ios)
+    setIsAndroid(android)
+    console.log("Device detection - iOS:", ios, "Android:", android)
+  }, [])
 
   // Create and set up audio element
   useEffect(() => {
     // Create audio element
-    const audio = new Audio("/music/bgmusic.mp3");
-    audio.loop = true;
-    audio.volume = 0.5;
-    audio.preload = "auto"; // Ensure preloading
-    audioRef.current = audio;
+    const audio = new Audio("/music/bgmusic.mp3")
+    audio.loop = true
+    audio.volume = 0.5
+    audio.preload = "auto" // Ensure preloading
+    audioRef.current = audio
 
     // Set up event listeners
     const handleCanPlayThrough = () => {
-      setIsLoaded(true);
-      console.log("Audio loaded and ready to play");
-    };
+      setIsLoaded(true)
+      console.log("Audio loaded and ready to play")
+    }
 
-    audio.addEventListener("canplaythrough", handleCanPlayThrough);
+    audio.addEventListener("canplaythrough", handleCanPlayThrough)
 
     // Add play/pause event listeners to update UI state
     const handlePlay = () => {
-      console.log("Audio played");
-      setIsPlaying(true);
-    };
+      console.log("Audio played")
+      setIsPlaying(true)
+    }
 
     const handlePause = () => {
-      console.log("Audio paused");
-      setIsPlaying(false);
-    };
+      console.log("Audio paused")
+      setIsPlaying(false)
+    }
 
-    audio.addEventListener("play", handlePlay);
-    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("play", handlePlay)
+    audio.addEventListener("pause", handlePause)
 
     // Clean up
     return () => {
-      audio.pause();
-      audio.removeEventListener("canplaythrough", handleCanPlayThrough);
-      audio.removeEventListener("play", handlePlay);
-      audio.removeEventListener("pause", handlePause);
-
-      // Clear any pending timeouts
-      if (clickTimeoutRef.current) {
-        clearTimeout(clickTimeoutRef.current);
-      }
-    };
-  }, []);
+      audio.pause()
+      audio.removeEventListener("canplaythrough", handleCanPlayThrough)
+      audio.removeEventListener("play", handlePlay)
+      audio.removeEventListener("pause", handlePause)
+    }
+  }, [])
 
   // Listen for first user interaction to enable audio - only once
   useEffect(() => {
     // Only set up the first interaction handler if we haven't had one yet
-    if (firstInteractionComplete) return;
+    if (firstInteractionComplete) return
 
     const handleFirstInteraction = () => {
       if (!userInteracted) {
-        console.log("First interaction detected");
-        setUserInteracted(true);
-        setFirstInteractionComplete(true);
+        console.log("First interaction detected")
+        setUserInteracted(true)
+        setFirstInteractionComplete(true)
 
         // Only auto-play if user hasn't manually turned off music
         if (!manuallyTurnedOff && audioRef.current && !isPlaying) {
           // Try to play immediately on first interaction
-          playAudio();
+          setTimeout(() => {
+            playAudio()
+          }, 100) // Small delay to ensure context is ready
         }
       }
-    };
+    }
 
     // Add event listeners for user interactions
-    const interactionEvents = ["click", "touchstart"];
+    // Use more events for better cross-platform support
+    const interactionEvents = ["click", "touchstart", "touchend", "pointerdown"]
 
     interactionEvents.forEach((event) => {
-      document.addEventListener(event, handleFirstInteraction, { once: true });
-    });
+      document.addEventListener(event, handleFirstInteraction, { once: true })
+    })
 
     return () => {
       interactionEvents.forEach((event) => {
-        document.removeEventListener(event, handleFirstInteraction);
-      });
-    };
-  }, [isPlaying, manuallyTurnedOff, userInteracted, firstInteractionComplete]);
+        document.removeEventListener(event, handleFirstInteraction)
+      })
+    }
+  }, [isPlaying, manuallyTurnedOff, userInteracted, firstInteractionComplete])
 
-  // Play audio with iOS-specific handling
+  // Play audio with platform-specific handling
   const playAudio = async () => {
-    if (!audioRef.current) return;
+    if (!audioRef.current) return
 
     try {
-      console.log("Attempting to play audio");
+      console.log("Attempting to play audio")
 
-      // For iOS, we need a more direct approach
-      if (isIOS) {
+      // For mobile devices (iOS or Android)
+      if (isIOS || isAndroid) {
         try {
           // Direct play attempt for iOS
           await audioRef.current.play();
@@ -124,24 +124,30 @@ export function MusicPlayer() {
         } catch (iosError) {
           console.error("iOS play failed:", iosError);
 
-          // Fallback for iOS - try with user gesture
+          // Fallback for mobile - try with user gesture
           const unlockAudio = () => {
             if (audioRef.current) {
+              // Force unmute for Android
+              audioRef.current.muted = false;
+              audioRef.current.volume = 0.5;
+
               audioRef.current
                 .play()
                 .then(() => {
-                  console.log("iOS play successful after user gesture");
+                  console.log("Mobile play successful after user gesture");
                   setIsPlaying(true);
                   document.removeEventListener("touchend", unlockAudio);
                 })
-                .catch((err) => console.error("Still failed on iOS:", err));
+                .catch((err) => console.error("Still failed on mobile:", err));
             }
           };
 
+          // Add multiple event types for better cross-platform support
           document.addEventListener("touchend", unlockAudio, { once: true });
+          document.addEventListener("click", unlockAudio, { once: true });
         }
       } else {
-        // Standard approach for other browsers
+        // Standard approach for desktop browsers
         const playPromise = audioRef.current.play();
 
         if (playPromise !== undefined) {
@@ -156,71 +162,70 @@ export function MusicPlayer() {
         }
       }
     } catch (error) {
-      console.error("Error in playAudio function:", error);
+      console.error("Error in playAudio function:", error)
     }
-  };
+  }
 
   // Pause audio
   const pauseAudio = () => {
-    if (!audioRef.current) return;
+    if (!audioRef.current) return
 
     try {
-      audioRef.current.pause();
-      setIsPlaying(false);
+      audioRef.current.pause()
+      setIsPlaying(false)
     } catch (error) {
-      console.error("Error pausing audio:", error);
+      console.error("Error pausing audio:", error)
     }
-  };
+  }
 
-  // Unified handler for all click/touch events with debounce
-  const handleButtonInteraction = (e: React.MouseEvent | React.TouchEvent) => {
-    // Prevent default behavior and stop propagation
-    e.preventDefault();
-    e.stopPropagation();
+  // Toggle play/pause with manual tracking - improved for mobile
+  const togglePlay = async (e: React.MouseEvent | React.TouchEvent) => {
+    // Stop propagation to prevent other handlers from firing
+    e.stopPropagation()
 
-    // If we're already processing a click, ignore this one
-    if (isProcessingClick) return;
+    if (!audioRef.current) return
 
-    // Set processing flag to prevent multiple rapid clicks
-    setIsProcessingClick(true);
+    console.log("Toggle play clicked, current state:", isPlaying)
 
-    // Clear any existing timeout
-    if (clickTimeoutRef.current) {
-      clearTimeout(clickTimeoutRef.current);
-    }
-
-    // Toggle audio state
     if (isPlaying) {
-      pauseAudio();
-      setManuallyTurnedOff(true);
+      pauseAudio()
+      setManuallyTurnedOff(true)
     } else {
-      playAudio();
-      setManuallyTurnedOff(false);
-    }
+      // For mobile devices, we need to ensure we're in a user gesture context
+      if (isIOS || isAndroid) {
+        try {
+          // Force unmute for Android
+          audioRef.current.muted = false
+          audioRef.current.volume = 0.5
 
-    // Set a timeout to allow new clicks after a short delay
-    clickTimeoutRef.current = setTimeout(() => {
-      setIsProcessingClick(false);
-    }, 300); // 300ms debounce
-  };
+          // Direct attempt within user gesture
+          await audioRef.current.play()
+          setIsPlaying(true)
+          setManuallyTurnedOff(false)
+        } catch (mobileError) {
+          console.error("Mobile toggle play failed:", mobileError)
+        }
+      } else {
+        await playAudio()
+        setManuallyTurnedOff(false)
+      }
+    }
+  }
 
   return (
     <button
       ref={buttonRef}
-      onClick={handleButtonInteraction}
+      onClick={togglePlay}
+      onTouchStart={isIOS || isAndroid ? togglePlay : undefined}
       className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/80 shadow-md hover:bg-white transition-colors cursor-pointer active:bg-gray-200"
-      aria-label={isPlaying ? "Pause music" : "Play music"}
-      disabled={!isLoaded || isProcessingClick}
+      aria-label={isPlaying ? "Mute music" : "Play music"}
+      disabled={!isLoaded}
       style={{
         WebkitTapHighlightColor: "transparent",
         touchAction: "manipulation", // Improve touch handling
       }}
     >
-      {isPlaying ? (
-        <Pause className="h-6 w-6 text-stone-800" />
-      ) : (
-        <Play className="h-6 w-6 text-stone-800" />
-      )}
+      {isPlaying ? <Pause className="h-6 w-6 text-stone-800" /> : <Play className="h-6 w-6 text-stone-800" />}
     </button>
-  );
+  )
 }
