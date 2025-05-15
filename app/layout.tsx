@@ -30,8 +30,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
+          forcedTheme="light"
           disableTransitionOnChange
         >
           {children}
