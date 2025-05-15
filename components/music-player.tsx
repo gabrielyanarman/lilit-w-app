@@ -8,6 +8,7 @@ import { Play, Pause } from "lucide-react";
 export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isAndroid, setIsAndroid] = useState(false);
   const [userInteracted, setUserInteracted] = useState(false);
   const [manuallyTurnedOff, setManuallyTurnedOff] = useState(false);
   const [firstInteractionComplete, setFirstInteractionComplete] =
@@ -24,9 +25,9 @@ export function MusicPlayer() {
       /iPad|iPhone|iPod/.test(navigator.userAgent) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ||
       /iPhone|iPad|iPod/.test(navigator.platform);
-
+    const android = /Android/.test(navigator.userAgent);
+    setIsAndroid(android);
     setIsIOS(ios);
-    console.log("iOS detected:", ios);
   }, []);
 
   // Create and set up audio element
@@ -115,7 +116,7 @@ export function MusicPlayer() {
       console.log("Attempting to play audio");
 
       // For iOS, we need a more direct approach
-      if (isIOS) {
+      if (isIOS || isAndroid) {
         try {
           // Direct play attempt for iOS
           await audioRef.current.play();
