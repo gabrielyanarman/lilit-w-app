@@ -51,7 +51,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="inset-0 flex flex-col items-center justify-center text-center z-20 text-black p-4 gap-12">
+        <div className="inset-0 flex flex-col items-center justify-center text-center z-20 text-black p-4 gap-6">
           <div>
             {/* <h1 className="font-serif text-5xl md:text-7xl mb-4">
               Արման & Անահիտ
@@ -62,10 +62,10 @@ export default function Home() {
             <p className="">Սիրով հրավիրում ենք Ձեզ</p>
             <p className="">կիսելու մեզ հետ, մեր կյանքի</p>
             <p className="">կարևոր և հիշարժան օրը</p>
-            <p className="">28․06․2025</p>
+            <p className="mt-8">28․06․2025</p>
           </div>
           <div>
-            <p className="text-xl md:text-2xl mb-8 font-light">
+            <p className="text-xl md:text-2xl my-8 font-light">
               Հարսանիքին մնացել է
             </p>
             <CountdownTimer targetDate="2025-06-26T17:00:00" />
