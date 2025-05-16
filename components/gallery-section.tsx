@@ -175,7 +175,7 @@ export function GallerySection() {
   };
 
   return (
-    <section className="py-12 w-full overflow-hidden">
+    <section className="w-full overflow-hidden">
       <div className="text-center mb-6 md:mb-8">
         <Separator className="mx-auto w-16 md:w-24 mb-8 md:mb-12" />
       </div>

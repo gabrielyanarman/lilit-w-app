@@ -1,11 +1,13 @@
 "use client";
+
 import Image from "next/image";
 import { Calendar, Clock, MapPin, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { CountdownTimer } from "@/components/countdown-timer";
 import { GallerySection } from "@/components/gallery-section";
 import { MusicPlayer } from "@/components/music-player";
+import { DecorativeDivider } from "@/components/decorative-divider";
+import { motion } from "framer-motion";
 
 export default function Home() {
   // Smooth scroll function for the down arrow
@@ -22,16 +24,15 @@ export default function Home() {
       window.scrollTo(scrollOptions);
     } catch (error) {
       // Fallback for older browsers
-      console.log(error)
+      console.log(error);
     }
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <main className="flex min-h-screen flex-col items-center overflow-hidden">
       {/* Hero Section */}
-      <section className="flex flex-col gap-4">
-        {/* <div className="absolute inset-0 bg-black/30 z-10" /> */}
-        <div className="h-screen w-full">
+      <section className="flex flex-col gap-4 w-full">
+        <div className="h-screen w-full relative">
           <Image
             src="/images/bg.jpg"
             alt="Wedding couple"
@@ -39,40 +40,55 @@ export default function Home() {
             priority
             className="object-cover"
           />
+
+          {/* Semi-transparent overlay for names - mobile only */}
+
           <div className="absolute top-4 left-4 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
-            <h1 className="font-serif text-white">Արման</h1>
+            <h1 className="font-serif text-white font-bold">Արման</h1>
           </div>
           <div className="absolute top-12 left-12 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
-            <h1 className="font-serif text-white">&</h1>
+            <h1 className="font-serif text-white font-bold">&</h1>
           </div>
           <div className="absolute top-20 left-14 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
-            <h1 className="font-serif text-white">Անահիտ</h1>
+            <h1 className="font-serif text-white font-bold">Անահիտ</h1>
+          </div>
+
+          {/* Semi-transparent overlay for countdown - mobile only */}
+          <div className="absolute bottom-0 left-0 w-full h-screen bg-gradient-to-b from-black/50 via-transparent to-black/50 md:hidden"></div>
+
+          <div className="absolute bottom-22 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10 md:hidden">
+            <p className="text-xl md:text-2xl my-8 font-bold md:font-light text-white font-serif drop-shadow-md">
+              Հարսանիքին մնացել է
+            </p>
+            <CountdownTimer targetDate="2025-06-26T17:00:00" />
           </div>
           <div
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10 md:hidden"
+            className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10 md:hidden"
             onClick={handleScrollDown}
             aria-label="Scroll down"
           >
             <ChevronDown className="h-10 w-10 text-white drop-shadow-lg animate-bounce" />
-            <p className="text-white text-sm mt-1 drop-shadow-lg">
-              Scroll Down
-            </p>
           </div>
         </div>
 
         <div className="inset-0 flex flex-col items-center justify-center text-center z-20 text-black p-4 gap-6">
           <div></div>
           <div className="flex flex-col gap-2">
-            <p className="text-xl md:text-2xl mb-4 font-light">
+            <p className="text-xl md:text-2xl mb-4 font-light text-stone-600 font-serif">
               Հարգելի՝ հյուրեր
             </p>
-            <p className="">Սիրով հրավիրում ենք Ձեզ</p>
-            <p className="">կիսելու մեզ հետ, մեր կյանքի</p>
-            <p className="">կարևոր և հիշարժան օրը</p>
-            <p className="mt-8">28․06․2025</p>
+            <p className="text-stone-600 font-serif">Սիրով հրավիրում ենք Ձեզ</p>
+
+            <p className="text-stone-600 font-serif">
+              կիսելու մեզ հետ, մեր կյանքի
+            </p>
+            <p className="text-stone-600 font-serif">կարևոր և հիշարժան օրը</p>
+            <p className="mt-8 text-stone-600 font-serif text-4xl">
+              28․06․2025
+            </p>
           </div>
-          <div>
-            <p className="text-xl md:text-2xl my-8 font-light">
+          <div className="md:block hidden pb-24">
+            <p className="text-xl md:text-2xl mt-8 mb-14 font-light text-stone-600 font-serif">
               Հարսանիքին մնացել է
             </p>
             <CountdownTimer targetDate="2025-06-26T17:00:00" />
@@ -80,50 +96,84 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Decorative divider between sections */}
+      <DecorativeDivider />
+
       {/* Gallery Section */}
       <GallerySection />
 
-      {/* Event Details Section */}
-      <section className="py-24 px-4 w-full bg-stone-100">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="font-serif text-4xl md:text-5xl mb-6">Ծրագիր</h2>
-          <Separator className="mx-auto w-24 mb-12" />
+      {/* Decorative divider between sections */}
+      <DecorativeDivider />
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-lg shadow-sm">
-              <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Calendar className="h-8 w-8 text-stone-700" />
+      {/* Event Details Section - Enhanced for wedding context */}
+      <section className="px-4 pb-12 w-full bg-gradient-to-b ">
+        <motion.div
+          className="max-w-5xl mx-auto text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="font-serif text-4xl md:text-5xl my-12 text-stone-600">
+            Ծրագիր
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8 md:gap-6">
+            <motion.div className="bg-white p-8 rounded-lg shadow-md border border-stone-100 hover:shadow-lg relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-stone-300 to-stone-500"></div>
+              <div className="w-20 h-20 bg-gradient-to-br from-stone-50 to-stone-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <Calendar className="h-8 w-8 text-stone-500" />
               </div>
-              <h3 className="font-serif text-2xl mb-4">The Date</h3>
-              <p className="text-lg">Jun 28, 2025</p>
-              <p className="text-stone-500">Sunday</p>
-            </div>
+              <h3 className="font-serif text-2xl mb-3 text-stone-600">
+                Ամսաթիվը
+              </h3>
+              <p className="text-xl font-light text-stone-500">
+                Հունիսի 28, 2025
+              </p>
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+            </motion.div>
 
-            <div className="bg-white p-8 rounded-lg shadow-sm">
-              <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Clock className="h-8 w-8 text-stone-700" />
+            <motion.div className="bg-white p-8 rounded-lg shadow-md border border-stone-100 hover:shadow-lg transition-all relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-stone-300 to-stone-500"></div>
+              <div className="w-20 h-20 bg-gradient-to-br from-stone-50 to-stone-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <Clock className="h-8 w-8 text-stone-500" />
               </div>
-              <h3 className="font-serif text-2xl mb-4">The Time</h3>
-              <p className="text-lg">14:30</p>
-              <p className="text-stone-500">Պսակադրություն</p>
-              <p className="text-lg mt-2">17:00</p>
-              <p className="text-stone-500">Հարսանյաց Հանդիսություն</p>
-            </div>
+              <h3 className="font-serif text-2xl mb-3 text-stone-600">
+                Ժամանակը
+              </h3>
+              <div className="mb-3">
+                <p className="text-xl font-light text-stone-500">14:30</p>
+                <p className="text-stone-500 font-light">Պսակադրություն</p>
+              </div>
+              <div>
+                <p className="text-xl font-light text-stone-500">17:00</p>
+                <p className="text-stone-500 font-light">
+                  Հարսանյաց Հանդիսություն
+                </p>
+              </div>
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+            </motion.div>
 
-            <div className="bg-white p-8 rounded-lg shadow-sm">
-              <div className="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <MapPin className="h-8 w-8 text-stone-700" />
+            <motion.div className="bg-white p-8 rounded-lg shadow-md border border-stone-100 hover:shadow-lg relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-stone-300 to-stone-500"></div>
+              <div className="w-20 h-20 bg-gradient-to-br from-stone-50 to-stone-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <MapPin className="h-8 w-8 text-stone-500" />
               </div>
-              <h3 className="font-serif text-2xl mb-4">The Venue</h3>
-              <p className="text-lg">Elegant Gardens</p>
-              <p className="text-stone-500">123 Wedding Lane</p>
-              <p className="text-stone-500">Yerevan, Armenia</p>
-              <Button variant="link" className="mt-4">
-                View Map
+              <h3 className="font-serif text-2xl mb-3 text-stone-600">Վայրը</h3>
+              <p className="text-xl font-light text-stone-500">
+                Elegant Gardens
+              </p>
+              <p className="text-stone-500 font-light mb-1">123 Wedding Lane</p>
+              <p className="text-stone-500 font-light">Yerevan, Armenia</p>
+              <Button
+                variant="outline"
+                className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors"
+              >
+                Տեսնել քարտեզը
               </Button>
-            </div>
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
       <MusicPlayer />
     </main>

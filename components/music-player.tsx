@@ -5,10 +5,8 @@ import { Play, Pause } from "lucide-react";
 
 export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
-  // const [userInteracted, setUserInteracted] = useState(false);
   const [firstInteractionComplete, setFirstInteractionComplete] =
     useState(false);
-  // const [manuallyTurnedOff, setManuallyTurnedOff] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isProcessingClick, setIsProcessingClick] = useState(false);
 
@@ -16,7 +14,6 @@ export function MusicPlayer() {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Создание и настройка <audio>
   useEffect(() => {
     const audio = new Audio("/music/bgmusic.mp3");
     audio.loop = true;
@@ -45,7 +42,6 @@ export function MusicPlayer() {
     };
   }, []);
 
-  // Автостарт на первом касании экрана
   useEffect(() => {
     if (firstInteractionComplete) return;
 
@@ -56,7 +52,6 @@ export function MusicPlayer() {
         await audioRef.current.play();
         console.log("Audio auto-played on first interaction");
         setIsPlaying(true);
-        // setUserInteracted(true);
         setFirstInteractionComplete(true);
       } catch (err) {
         console.error("Autoplay failed:", err);
@@ -113,10 +108,8 @@ export function MusicPlayer() {
 
     if (isPlaying) {
       pauseAudio();
-      // setManuallyTurnedOff(true);
     } else {
       playAudio();
-      // setManuallyTurnedOff(false);
     }
 
     clickTimeoutRef.current = setTimeout(() => {
