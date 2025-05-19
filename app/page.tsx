@@ -146,10 +146,19 @@ export default function Home() {
               <p className="text-xl font-light text-stone-500 mt-4">14:30</p>
               <Button
                 onClick={() => {
-                  window.open(
-                    "https://yandex.by/maps/org/monastyr_ahartsyn/208720787790/?ll=44.933749%2C40.740968&z=12",
-                    "_blank"
-                  );
+                  const isMobile = /iPhone|Android/i.test(navigator.userAgent);
+
+                  if (isMobile) {
+                    window.open(
+                      "yandexnavi://build_route_on_map?lat_to=40.740968&lon_to=44.933749",
+                      "_blank"
+                    );
+                  } else {
+                    window.open(
+                      "https://yandex.by/maps/org/monastyr_ahartsyn/208720787790/?ll=44.933749%2C40.740968&z=12",
+                      "_blank"
+                    );
+                  }
                 }}
                 variant="outline"
                 className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors cursor-pointer"
@@ -180,10 +189,19 @@ export default function Home() {
               <p className="text-xl font-light text-stone-500 mt-4">17:30</p>
               <Button
                 onClick={() => {
-                  window.open(
-                    "https://yandex.by/maps/org/darling_hall/181968913069/?ll=44.964515%2C40.540439&z=17.08",
-                    "_blank"
-                  );
+                  const isMobile = /iPhone|Android/i.test(navigator.userAgent);
+
+                  if (isMobile) {
+                    window.open(
+                      "yandexnavi://build_route_on_map?lat_to=40.1850&lon_to=44.5150",
+                      "_blank"
+                    );
+                  } else {
+                    window.open(
+                      "https://yandex.by/maps/org/darling_hall/181968913069/?ll=44.964515%2C40.540439&z=17.08",
+                      "_blank"
+                    );
+                  }
                 }}
                 variant="outline"
                 className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors cursor-pointer"
