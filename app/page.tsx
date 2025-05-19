@@ -123,7 +123,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-gradient-to-br from-stone-50 to-stone-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
                 <Calendar className="h-8 w-8 text-stone-500" />
               </div>
-              <h3 className="font-serif text-2xl mb-3 text-stone-600">
+              <h3 className="font-serif text-2xl mb-6 text-stone-600">
                 Ամսաթիվը
               </h3>
               <p className="text-xl font-light text-stone-500">
@@ -143,6 +143,7 @@ export default function Home() {
               <p className="text-xl font-light text-stone-500 mb-2">
                 Հաղարծնի վանք
               </p>
+              <p className="text-stone-500 font-light mt-2">Տավուշի մարզ</p>
               <p className="text-xl font-light text-stone-500 mt-4">14:30</p>
               <Button
                 onClick={() => {
@@ -152,9 +153,9 @@ export default function Home() {
                   );
                 }}
                 variant="outline"
-                className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors cursor-pointer"
+                className="mt-8 border-stone-300 text-white bg-stone-600 hover:bg-stone-800 transition-colors cursor-pointer"
               >
-                Տեսնել քարտեզը
+                Ինչպես հասնել
               </Button>
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </motion.div>
@@ -186,9 +187,9 @@ export default function Home() {
                   );
                 }}
                 variant="outline"
-                className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors cursor-pointer"
+                className="mt-4 border-stone-300 text-white bg-stone-600 hover:bg-stone-800 transition-colors cursor-pointer"
               >
-                Տեսնել քարտեզը
+                Ինչպես հասնել
               </Button>
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </motion.div>
