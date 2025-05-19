@@ -145,8 +145,14 @@ export default function Home() {
               </p>
               <p className="text-xl font-light text-stone-500 mt-4">14:30</p>
               <Button
+                onClick={() => {
+                  window.open(
+                    "https://yandex.by/maps/org/monastyr_ahartsyn/208720787790/?ll=44.933749%2C40.740968&z=12",
+                    "_blank"
+                  );
+                }}
                 variant="outline"
-                className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors"
+                className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors cursor-pointer"
               >
                 Տեսնել քարտեզը
               </Button>
@@ -168,11 +174,19 @@ export default function Home() {
                 Darling Hall
               </p>
               <p className="text-stone-500 font-light mt-2">Արա Գեղեցիկ 8</p>
-              <p className="text-stone-500 font-light mt-2">Գեղարքունիքի մարզ</p>
+              <p className="text-stone-500 font-light mt-2">
+                Գեղարքունիքի մարզ
+              </p>
               <p className="text-xl font-light text-stone-500 mt-4">17:30</p>
               <Button
+                onClick={() => {
+                  window.open(
+                    "https://yandex.by/maps/org/darling_hall/181968913069/?ll=44.964515%2C40.540439&z=17.08",
+                    "_blank"
+                  );
+                }}
                 variant="outline"
-                className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors"
+                className="mt-4 border-stone-300 text-stone-600 hover:bg-stone-50 hover:text-stone-500 transition-colors cursor-pointer"
               >
                 Տեսնել քարտեզը
               </Button>
