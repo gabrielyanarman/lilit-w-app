@@ -150,7 +150,7 @@ export default function Home() {
 
                   if (isMobile) {
                     window.open(
-                      "yandexnavi://build_route_on_map?lat_to=40.740968&lon_to=44.933749",
+                      "yandexnavi://build_route_on_map?lat_to=40.810262&lon_to=44.890833",
                       "_blank"
                     );
                   } else {
@@ -193,7 +193,7 @@ export default function Home() {
 
                   if (isMobile) {
                     window.open(
-                      "yandexnavi://build_route_on_map?lat_to=40.1850&lon_to=44.5150",
+                      "yandexnavi://build_route_on_map?lat_to=40.540468&lon_to=44.964634",
                       "_blank"
                     );
                   } else {
