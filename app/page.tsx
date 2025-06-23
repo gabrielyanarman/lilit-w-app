@@ -44,13 +44,13 @@ export default function Home() {
           {/* Semi-transparent overlay for names - mobile only */}
 
           <div className="absolute top-4 left-4 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
-            <h1 className="font-serif text-white font-bold">Արման</h1>
+            <h1 className="font-serif text-white font-bold text-2xl">Արման</h1>
           </div>
-          <div className="absolute top-12 left-12 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
-            <h1 className="font-serif text-white font-bold">&</h1>
+          <div className="absolute top-16 left-12 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
+            <h1 className="font-serif text-white font-bold text-2xl">&</h1>
           </div>
-          <div className="absolute top-20 left-14 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
-            <h1 className="font-serif text-white font-bold">Անահիտ</h1>
+          <div className="absolute top-28 left-14 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
+            <h1 className="font-serif text-white font-bold text-2xl">Անահիտ</h1>
           </div>
 
           {/* Semi-transparent overlay for countdown - mobile only */}
@@ -60,7 +60,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl my-8 font-bold md:font-light text-white font-serif drop-shadow-md">
               Հարսանիքին մնացել է
             </p>
-            <CountdownTimer targetDate="2025-06-26T17:00:00" />
+            <CountdownTimer targetDate="2025-06-28T17:00:00" />
           </div>
           <div
             className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10 md:hidden"
@@ -75,12 +75,12 @@ export default function Home() {
           <div></div>
           <div className="flex flex-col gap-2">
             <p className="text-xl md:text-2xl mb-4 font-light text-stone-600 font-serif">
-              Հարգելի՝ հյուրեր
+              Հարգելի՛ հյուրեր
             </p>
             <p className="text-stone-600 font-serif">Սիրով հրավիրում ենք Ձեզ</p>
 
             <p className="text-stone-600 font-serif">
-              կիսելու մեզ հետ, մեր կյանքի
+              կիսելու մեզ հետ մեր կյանքի
             </p>
             <p className="text-stone-600 font-serif">կարևոր և հիշարժան օրը</p>
             <p className="mt-8 text-stone-600 font-serif text-4xl">
@@ -91,7 +91,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl mt-8 mb-14 font-light text-stone-600 font-serif">
               Հարսանիքին մնացել է
             </p>
-            <CountdownTimer targetDate="2025-06-26T17:00:00" />
+            <CountdownTimer targetDate="2025-06-28T17:00:00" />
           </div>
         </div>
       </section>
@@ -124,7 +124,7 @@ export default function Home() {
                 <Calendar className="h-8 w-8 text-stone-500" />
               </div>
               <h3 className="font-serif text-2xl mb-6 text-stone-600">
-                Ամսաթիվը
+                Ամսաթիվ
               </h3>
               <p className="text-xl font-light text-stone-500">
                 Հունիսի 28, 2025
@@ -144,7 +144,7 @@ export default function Home() {
                 Հաղարծնի վանք
               </p>
               <p className="text-stone-500 font-light mt-2">Տավուշի մարզ</p>
-              <p className="text-xl font-light text-stone-500 mt-4">14:30</p>
+              <p className="text-xl font-light text-stone-500 mt-4">14:00</p>
               <Button
                 onClick={() => {
                   window.open(
