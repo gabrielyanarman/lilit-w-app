@@ -34,7 +34,7 @@ export default function Home() {
       <section className="flex flex-col gap-4 w-full">
         <div className="h-screen w-full relative">
           <Image
-            src="/images/main.JPG"
+            src="/images/background.JPG"
             alt="Wedding couple"
             fill
             priority

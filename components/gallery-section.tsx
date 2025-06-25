@@ -21,7 +21,6 @@ export function GallerySection() {
     { src: "/images/b3.JPG", alt: "Couple photo 3" },
     { src: "/images/b4.JPG", alt: "Couple photo 4" },
     { src: "/images/b5.JPG", alt: "Couple photo 5" },
-    { src: "/images/b6.JPG", alt: "Couple photo 6" },
   ];
 
   // Detect device type and iOS
@@ -56,7 +55,7 @@ export function GallerySection() {
 
     let scrollPosition = 0;
     // Increased scroll speed for better experience
-    const scrollSpeed = isMobile ? 0.8 : 1.2; // Faster on both mobile and desktop
+    const scrollSpeed = 1; // Faster on both mobile and desktop
 
     // Calculate the width of a single set of images
     const calculateSetWidth = () => {
