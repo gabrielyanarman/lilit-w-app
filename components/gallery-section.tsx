@@ -16,10 +16,10 @@ export function GallerySection() {
 
   // Sample gallery images - replace with actual images
   const galleryImages = [
-    { src: "/images/b1.JPG", alt: "Couple photo 1" },
+    { src: "/images/c1.JPG", alt: "Couple photo 1" },
     { src: "/images/b2.JPG", alt: "Couple photo 2" },
-    { src: "/images/b3.JPG", alt: "Couple photo 3" },
-    { src: "/images/b4.JPG", alt: "Couple photo 4" },
+    { src: "/images/c3.JPG", alt: "Couple photo 3" },
+    { src: "/images/c4.JPG", alt: "Couple photo 4" },
     { src: "/images/b5.JPG", alt: "Couple photo 5" },
   ];
 
