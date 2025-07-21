@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Calendar, Church, Wine, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { CountdownTimer } from "@/components/countdown-timer";
 import { GallerySection } from "@/components/gallery-section";
 import { MusicPlayer } from "@/components/music-player";
