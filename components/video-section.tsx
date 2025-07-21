@@ -5,7 +5,6 @@ import { useRef, useState, useEffect } from "react";
 
 export default function VideoSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -47,14 +46,6 @@ export default function VideoSection() {
     }
   };
 
-  const handlePlay = () => {
-    setIsPlaying(true);
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false);
-  };
-
   return (
     <section className="w-full flex items-center justify-center via-stone-500 py-4 md:py-8">
       <div className="w-full max-w-6xl px-4">
@@ -73,9 +64,6 @@ export default function VideoSection() {
             playsInline
             preload="metadata"
             muted={false}
-            onPlay={handlePlay}
-            onPause={handlePause}
-            onEnded={handlePause}
             controls
             controlsList="nodownload"
             onClick={handleVideoClick}
