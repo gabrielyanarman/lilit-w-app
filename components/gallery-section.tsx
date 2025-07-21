@@ -20,6 +20,7 @@ export function GallerySection() {
     { src: "/images/3.JPG", alt: "Couple photo 2" },
     { src: "/images/4.JPG", alt: "Couple photo 3" },
     { src: "/images/5.JPG", alt: "Couple photo 4" },
+    { src: "/images/6.JPG", alt: "Couple photo 5" },
   ];
 
   // Detect device type and iOS
@@ -203,7 +204,11 @@ export function GallerySection() {
                 alt={image.alt}
                 fill
                 sizes="(max-width: 768px) 250px, 300px"
-                className="object-cover"
+                className={
+                  image.alt == "Couple photo 5"
+                    ? "object-cover object-right-top"
+                    : "object-cover"
+                }
                 loading="eager" // Force eager loading for first images
                 priority={index < 3} // Prioritize first 3 images
                 draggable={false} // Prevent dragging images
@@ -223,7 +228,11 @@ export function GallerySection() {
                 alt={image.alt}
                 fill
                 sizes="(max-width: 768px) 250px, 300px"
-                className="object-cover"
+                className={
+                  image.alt == "Couple photo 5"
+                    ? "object-cover object-right-top"
+                    : "object-cover"
+                }
                 draggable={false} // Prevent dragging images
               />
             </div>
