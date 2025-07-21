@@ -16,11 +16,10 @@ export function GallerySection() {
 
   // Sample gallery images - replace with actual images
   const galleryImages = [
-    { src: "/images/c1.jpg", alt: "Couple photo 1" },
-    { src: "/images/b2.JPG", alt: "Couple photo 2" },
-    { src: "/images/c3.jpg", alt: "Couple photo 3" },
-    { src: "/images/c4.jpg", alt: "Couple photo 4" },
-    { src: "/images/b5.JPG", alt: "Couple photo 5" },
+    { src: "/images/2.JPG", alt: "Couple photo 1" },
+    { src: "/images/3.JPG", alt: "Couple photo 2" },
+    { src: "/images/4.JPG", alt: "Couple photo 3" },
+    { src: "/images/5.JPG", alt: "Couple photo 4" },
   ];
 
   // Detect device type and iOS

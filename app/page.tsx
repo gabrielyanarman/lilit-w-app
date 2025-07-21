@@ -34,7 +34,7 @@ export default function Home() {
       <section className="flex flex-col gap-4 w-full">
         <div className="h-screen w-full relative">
           <Image
-            src="/images/background.JPG"
+            src="/images/6.JPG"
             alt="Wedding couple"
             fill
             priority
@@ -60,7 +60,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl my-8 font-bold md:font-light text-white font-serif drop-shadow-md">
               Հարսանիքին մնացել է
             </p>
-            <CountdownTimer targetDate="2025-06-28T17:00:00" />
+            <CountdownTimer targetDate="2025-08-23T17:00:00" />
           </div>
           <div
             className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10 md:hidden"
@@ -84,14 +84,14 @@ export default function Home() {
             </p>
             <p className="text-stone-600 font-serif">կարևոր և հիշարժան օրը</p>
             <p className="mt-8 text-stone-600 font-serif text-4xl">
-              28․06․2025
+              23․08․2025
             </p>
           </div>
           <div className="md:block hidden pb-24">
             <p className="text-xl md:text-2xl mt-8 mb-14 font-light text-stone-600 font-serif">
               Հարսանիքին մնացել է
             </p>
-            <CountdownTimer targetDate="2025-06-28T17:00:00" />
+            <CountdownTimer targetDate="2025-08-23T17:00:00" />
           </div>
         </div>
       </section>
@@ -127,7 +127,7 @@ export default function Home() {
                 Ամսաթիվ
               </h3>
               <p className="text-xl font-light text-stone-500">
-                Հունիսի 28, 2025
+                Օգոստոսի 23, 2025
               </p>
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </motion.div>
@@ -141,11 +141,13 @@ export default function Home() {
                 Պսակադրություն
               </h3>
               <p className="text-xl font-light text-stone-500 mb-2">
-                Հաղարծնի վանք
+                Սուրբ Հովհաննես եկեղեցի
               </p>
-              <p className="text-stone-500 font-light mt-2">Տավուշի մարզ</p>
+              <p className="text-stone-500 font-light mt-2">
+                Տավուշի մ., գ. Կողբ
+              </p>
               <p className="text-xl font-light text-stone-500 mt-4">14:00</p>
-              <Button
+              {/* <Button
                 onClick={() => {
                   window.open(
                     "https://yandex.ru/navi/org/208720787790?si=u3dpby2bgp1qvpc6mu8cwwpf28",
@@ -156,7 +158,7 @@ export default function Home() {
                 className="mt-8 border-stone-300 text-white bg-stone-600 hover:bg-stone-800 transition-colors cursor-pointer"
               >
                 Ինչպես հասնել
-              </Button>
+              </Button> */}
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </motion.div>
 
@@ -172,14 +174,12 @@ export default function Home() {
                 Հարսանյաց Հանդիսություն
               </h3>
               <p className="text-xl font-light text-stone-500 mt-4">
-                Darling Hall
+                Տավուշի մ., ք. Նոյեմբերյան
               </p>
-              <p className="text-stone-500 font-light mt-2">Արա Գեղեցիկ 8</p>
-              <p className="text-stone-500 font-light mt-2">
-                Գեղարքունիքի մարզ
-              </p>
+              {/* <p className="text-stone-500 font-light mt-2">Արա Գեղեցիկ 8</p> */}
+              {/* <p className="text-stone-500 font-light mt-2"></p> */}
               <p className="text-xl font-light text-stone-500 mt-4">17:30</p>
-              <Button
+              {/* <Button
                 onClick={() => {
                   window.open(
                     "https://yandex.ru/navi/org/darling_hall/181968913069?si=u3dpby2bgp1qvpc6mu8cwwpf28",
@@ -190,7 +190,7 @@ export default function Home() {
                 className="mt-4 border-stone-300 text-white bg-stone-600 hover:bg-stone-800 transition-colors cursor-pointer"
               >
                 Ինչպես հասնել
-              </Button>
+              </Button> */}
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </motion.div>
           </div>
