@@ -44,13 +44,13 @@ export default function Home() {
           {/* Semi-transparent overlay for names - mobile only */}
 
           <div className="absolute top-4 left-4 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
-            <h1 className="font-serif text-white font-bold text-2xl">Արման</h1>
+            <h1 className="font-serif text-white font-bold text-2xl">Աղաս</h1>
           </div>
           <div className="absolute top-16 left-12 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
             <h1 className="font-serif text-white font-bold text-2xl">&</h1>
           </div>
           <div className="absolute top-28 left-14 transform flex flex-col items-center cursor-pointer z-10 md:hidden">
-            <h1 className="font-serif text-white font-bold text-2xl">Անահիտ</h1>
+            <h1 className="font-serif text-white font-bold text-2xl">Լիլիթ</h1>
           </div>
 
           {/* Semi-transparent overlay for countdown - mobile only */}
