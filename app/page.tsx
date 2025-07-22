@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Calendar, Church, Wine, ChevronDown } from "lucide-react";
+import { Calendar, Church, Wine, ChevronDown, House } from "lucide-react";
 import { CountdownTimer } from "@/components/countdown-timer";
 import { GallerySection } from "@/components/gallery-section";
 import { MusicPlayer } from "@/components/music-player";
@@ -59,7 +59,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl my-8 font-bold md:font-light text-white font-serif drop-shadow-md">
               Հարսանիքին մնացել է
             </p>
-            <CountdownTimer targetDate="2025-08-23T17:00:00" />
+            <CountdownTimer targetDate="2025-08-23T16:30:00" />
           </div>
           <div
             className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10 md:hidden"
@@ -90,7 +90,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl mt-8 mb-14 font-light text-stone-600 font-serif">
               Հարսանիքին մնացել է
             </p>
-            <CountdownTimer targetDate="2025-08-23T17:00:00" />
+            <CountdownTimer targetDate="2025-08-23T16:30:00" />
           </div>
         </div>
       </section>
@@ -131,6 +131,16 @@ export default function Home() {
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </motion.div>
 
+            <motion.div className="bg-white p-8 rounded-lg shadow-md border border-stone-100 hover:shadow-lg relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-stone-300 to-stone-500"></div>
+              <div className="w-20 h-20 bg-gradient-to-br from-stone-50 to-stone-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <House className="h-8 w-8 text-stone-500" />
+              </div>
+              <p className="text-xl font-light text-stone-500">Հարսիկի տուն՝ 12:00</p>
+              <p className="text-xl font-light text-stone-500 mt-4">Փեսայի տուն՝ 15:00</p>
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+            </motion.div>
+
             <motion.div className="bg-white p-8 rounded-lg shadow-md border border-stone-100 hover:shadow-lg transition-all relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-stone-300 to-stone-500"></div>
               <div className="w-20 h-20 bg-gradient-to-br from-stone-50 to-stone-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
@@ -143,7 +153,7 @@ export default function Home() {
                 Սուրբ Հովհաննես եկեղեցի
               </p>
               <p className="text-stone-500 font-light mt-2">
-                Տավուշի մ., գ. Կողբ
+                Տավուշի մարզ, գ. Կողբ
               </p>
               <p className="text-xl font-light text-stone-500 mt-4">14:00</p>
               {/* <Button
@@ -173,11 +183,13 @@ export default function Home() {
                 Հարսանյաց Հանդիսություն
               </h3>
               <p className="text-xl font-light text-stone-500 mt-4">
-                Տավուշի մ., ք. Նոյեմբերյան
+                ք. Նոյեմբերյան
               </p>
-              {/* <p className="text-stone-500 font-light mt-2">Արա Գեղեցիկ 8</p> */}
+              <p className="text-stone-500 font-light mt-2">
+                Նոյեմբերի 29-ի փ., 19
+              </p>
               {/* <p className="text-stone-500 font-light mt-2"></p> */}
-              <p className="text-xl font-light text-stone-500 mt-4">17:30</p>
+              <p className="text-xl font-light text-stone-500 mt-4">16:30</p>
               {/* <Button
                 onClick={() => {
                   window.open(
