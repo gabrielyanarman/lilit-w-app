@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import { Calendar, Church, Wine, ChevronDown } from "lucide-react";
-// import { Button } from "@/components/ui/button";
 import { CountdownTimer } from "@/components/countdown-timer";
 import { GallerySection } from "@/components/gallery-section";
 import { MusicPlayer } from "@/components/music-player";
 import { DecorativeDivider } from "@/components/decorative-divider";
 import { motion } from "framer-motion";
-import VideoSection from "@/components/video-section";
 
 export default function Home() {
   // Smooth scroll function for the down arrow
@@ -104,10 +102,6 @@ export default function Home() {
       <GallerySection />
 
       {/* Decorative divider between sections */}
-      <DecorativeDivider />
-
-      <VideoSection />
-
       <DecorativeDivider />
 
       {/* Event Details Section - Enhanced for wedding context */}
