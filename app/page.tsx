@@ -116,7 +116,7 @@ export default function Home() {
           <h2 className="font-serif text-4xl md:text-5xl my-12 text-stone-600">
             Ծրագիր
           </h2>
-          <div className="grid md:grid-cols-3 gap-8 md:gap-6">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-6">
             <motion.div className="bg-white p-8 rounded-lg shadow-md border border-stone-100 hover:shadow-lg relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-stone-300 to-stone-500"></div>
               <div className="w-20 h-20 bg-gradient-to-br from-stone-50 to-stone-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
@@ -156,18 +156,6 @@ export default function Home() {
                 Տավուշի մարզ, գ. Կողբ
               </p>
               <p className="text-xl font-light text-stone-500 mt-4">14:00</p>
-              {/* <Button
-                onClick={() => {
-                  window.open(
-                    "https://yandex.ru/navi/org/208720787790?si=u3dpby2bgp1qvpc6mu8cwwpf28",
-                    "_blank"
-                  );
-                }}
-                variant="outline"
-                className="mt-8 border-stone-300 text-white bg-stone-600 hover:bg-stone-800 transition-colors cursor-pointer"
-              >
-                Ինչպես հասնել
-              </Button> */}
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </motion.div>
 
@@ -179,29 +167,17 @@ export default function Home() {
                   <Wine className="w-8 h-8 text-stone-500 rotate-[-15deg]" />
                 </div>
               </div>
-              <h3 className="font-serif text-2xl mb-3 text-stone-600">
+              <h3 className="font-serif text-2xl mb-6 text-stone-600">
                 Հարսանյաց Հանդիսություն
               </h3>
-              <p className="text-xl font-light text-stone-500 mt-4">
-                ք. Նոյեմբերյան
+              <p className="text-xl font-light text-stone-500 mb-2">
+                Ք. Նոյեմբերյան
               </p>
               <p className="text-stone-500 font-light mt-2">
                 Նոյեմբերի 29-ի փ., 19
               </p>
               {/* <p className="text-stone-500 font-light mt-2"></p> */}
               <p className="text-xl font-light text-stone-500 mt-4">16:30</p>
-              {/* <Button
-                onClick={() => {
-                  window.open(
-                    "https://yandex.ru/navi/org/darling_hall/181968913069?si=u3dpby2bgp1qvpc6mu8cwwpf28",
-                    "_blank"
-                  );
-                }}
-                variant="outline"
-                className="mt-4 border-stone-300 text-white bg-stone-600 hover:bg-stone-800 transition-colors cursor-pointer"
-              >
-                Ինչպես հասնել
-              </Button> */}
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-stone-50 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </motion.div>
           </div>
